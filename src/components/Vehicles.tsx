@@ -8,7 +8,7 @@ import { EV_CATALOG, EV_BRANDS } from '../evCatalog';
 
 interface VehiclesProps {
   vehicles: Vehicle[];
-  activeVehicle: Vehicle;
+  activeVehicle: Vehicle | null;
   onSelectVehicle: (id: string) => void;
   onAddVehicle: (newVehicle: Vehicle) => void;
   onDeleteVehicle: (id: string) => void;
@@ -287,7 +287,27 @@ export default function Vehicles({
       ) : (
         /* State B: Active Selected Vehicle Details Panel */
         <div className="space-y-6">
-          
+
+          {!activeVehicle ? (
+            /* Empty state — no vehicles registered yet */
+            <div className="flex flex-col items-center justify-center py-16 gap-5 animate-fade-in">
+              <div className="w-16 h-16 rounded-full bg-surface-container-high border border-outline-variant/30 flex items-center justify-center">
+                <PlusCircle className="w-8 h-8 text-on-surface-variant/50" />
+              </div>
+              <div className="text-center space-y-1.5">
+                <h3 className="font-sans text-base font-bold text-on-surface">No vehicles yet</h3>
+                <p className="text-xs text-on-surface-variant">Add your first EV to start tracking charging sessions and savings.</p>
+              </div>
+              <button
+                onClick={() => setIsAdding(true)}
+                className="bg-primary text-on-primary font-bold text-sm px-6 py-3 rounded-xl hover:bg-primary/90 transition-all shadow-md active:scale-95 flex items-center gap-2"
+              >
+                <PlusCircle className="w-4 h-4" />
+                Add Your First Car
+              </button>
+            </div>
+          ) : (<>
+
           {/* Header context selectors block */}
           <section className="space-y-4">
             
@@ -477,6 +497,7 @@ export default function Vehicles({
             )}
 
           </section>
+          </>)}
 
         </div>
       )}
