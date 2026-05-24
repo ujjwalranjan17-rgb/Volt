@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  /* Brand colors configured according to Elegant Dark specifications */
+  --color-surface: #0a0a0c;
+  --color-background: #0a0a0c;
+  --color-primary: #6366f1; /* Premium Indigo */
+  --color-primary-container: #4f46e5;
+  --color-secondary: #10b981; /* High-fidelity Emerald */
+  --color-tertiary: #a5b4fc;
+  --color-surface-container-high: #161618;
+  --color-surface-container-low: #0e0e10;
+  --color-surface-container: #111113;
+  --color-surface-container-highest: #202023;
+  --color-on-surface: #f4f4f5; /* Zinc-100 */
+  --color-on-surface-variant: #a1a1aa; /* Zinc-400 */
+  --color-outline: #27272a; /* Zinc-800 */
+  --color-outline-variant: #3f3f46; /* Zinc-700 */
+  --color-error: #f87171;
+}
+
+/* Base level page setup */
+body {
+  background-color: #0a0a0c;
+  color: #e4e4e7;
+  font-family: var(--font-sans);
+}
+
+/* Content Entrance Transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Premium text glow */
+.glow-text {
+  text-shadow: 0 0 16px rgba(99, 102, 241, 0.35);
+}
+
+/* Orange custom chip styling fallback */
+.orange-tag {
+  background-color: rgba(238, 152, 0, 0.15) !important;
+  color: #ffb95f !important;
+  border-color: rgba(238, 152, 0, 0.25) !important;
+}
+
+/* Hide scrollbars elegantly */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(134, 148, 138, 0.2);
+  border-radius: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
