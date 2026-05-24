@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { trackTimelineChanged } from '../analytics';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { Calendar, Route, Plug, Fuel, Sparkles, TrendingUp, PlusCircle, Zap } from 'lucide-react';
 import { Vehicle, ChargingSession, CostAssumptions } from '../types';
@@ -266,7 +267,7 @@ export default function Dashboard({
             {(['3_months', '6_months', '1_year'] as const).map((t) => (
               <button
                 key={t}
-                onClick={() => setTimeline(t)}
+                onClick={() => { setTimeline(t); trackTimelineChanged(t); }}
                 className={`px-3 py-1 text-[10px] font-semibold rounded-md transition-all ${
                   timeline === t
                     ? 'bg-primary text-on-primary shadow-sm font-bold'

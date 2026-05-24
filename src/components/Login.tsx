@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Lock, User, Eye, EyeOff, Check, X, Zap, AlertCircle, KeyRound, ShieldCheck, Sparkles, Users } from 'lucide-react';
+import { trackLogin, trackSignUp } from '../analytics';
 
 interface LoginProps {
   onLoginSuccess: (username: string) => void;
@@ -96,6 +97,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
 
   // ── One-click demo login ───────────────────────────────────────────────────
   const handleDemoLogin = () => {
+    trackLogin('demo');
     onLoginSuccess('ujjwal');
   };
 
@@ -116,6 +118,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
       const usersRaw = localStorage.getItem('volt_users');
       const users: Record<string, string> = usersRaw ? JSON.parse(usersRaw) : {};
       if (users[cleanUsername] && users[cleanUsername] === inputHash) {
+        trackLogin('email');
         onLoginSuccess(cleanUsername);
       } else {
         setErrorMsg('Invalid username or password.');
@@ -142,6 +145,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
       const hashed = await hashPassword(password);
       users[cleanUsername] = hashed;
       localStorage.setItem('volt_users', JSON.stringify(users));
+      trackSignUp();
       setSuccessMsg('Account created! Signing you in…');
       setTimeout(() => onLoginSuccess(cleanUsername), 1200);
     } catch { setErrorMsg('Could not create account. Please try again.'); }

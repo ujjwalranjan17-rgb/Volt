@@ -5,6 +5,15 @@ import {
 } from 'lucide-react';
 
 import { Vehicle, ChargingSession, CostAssumptions } from './types';
+import {
+  trackScreenView,
+  trackOnboardingComplete,
+  trackVehicleAdded,
+  trackVehicleDeleted,
+  trackSessionLogged,
+  trackSessionDeleted,
+  trackDataCleared,
+} from './analytics';
 import { INITIAL_VEHICLES, INITIAL_ASSUMPTIONS, INITIAL_SESSIONS } from './mockData';
 import { DEMO_HISTORICAL, EMPTY_HISTORICAL, HistoricalBase } from './utils';
 
@@ -95,6 +104,11 @@ export default function App() {
     if (currentUser) localStorage.setItem(`volt_${currentUser}_config`, JSON.stringify(config));
   }, [config, currentUser]);
 
+  // ── Analytics — screen view tracking ────────────────────────────────────────
+  useEffect(() => {
+    if (currentUser) trackScreenView(currentTab);
+  }, [currentTab, currentUser]);
+
   // ── Actions ──────────────────────────────────────────────────────────────────
   const handleLoginSuccess = (username: string) => {
     localStorage.setItem('volt_current_user', username);
@@ -112,6 +126,7 @@ export default function App() {
     if (currentUser) {
       localStorage.setItem(`volt_${currentUser}_onboarding_done`, 'true');
     }
+    trackOnboardingComplete();
     setShowOnboarding(false);
   };
 
@@ -121,6 +136,12 @@ export default function App() {
   };
 
   const handleAddSession = (newSession: ChargingSession) => {
+    trackSessionLogged({
+      type: newSession.type,
+      isSolar: newSession.isSolar,
+      energyKwh: newSession.energyKwh,
+      hasCost: newSession.cost > 0,
+    });
     setSessions(prev => [newSession, ...prev]);
 
     setVehicles(prevVehs => prevVehs.map(veh => {
@@ -141,10 +162,12 @@ export default function App() {
   };
 
   const handleDeleteSession = (id: string) => {
+    trackSessionDeleted();
     setSessions(prev => prev.filter(s => s.id !== id));
   };
 
   const handleAddVehicle = (newVehicle: Vehicle) => {
+    trackVehicleAdded(newVehicle.brand, newVehicle.model);
     setVehicles(prev => [...prev, newVehicle]);
     setActiveVehicleId(newVehicle.id);
     // Once user adds a vehicle, dismiss onboarding if still showing
@@ -152,6 +175,7 @@ export default function App() {
   };
 
   const handleDeleteVehicle = (id: string) => {
+    trackVehicleDeleted();
     const updated = vehicles.filter(v => v.id !== id);
     setVehicles(updated);
     setActiveVehicleId(updated.length > 0 ? updated[0].id : '');
@@ -159,6 +183,7 @@ export default function App() {
 
   const handleClearSessions = () => {
     if (!currentUser) return;
+    trackDataCleared();
     localStorage.removeItem(`volt_${currentUser}_sessions`);
     localStorage.removeItem(`volt_${currentUser}_vehicles`);
     localStorage.removeItem(`volt_${currentUser}_config`);
