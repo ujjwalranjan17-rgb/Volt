@@ -77,3 +77,17 @@ body {
 .scrollbar-thin::-webkit-scrollbar-track {
   background: transparent;
 }
+
+/* Horizontal scrolling marquee for community names banner */
+@keyframes scrollX {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.animate-scroll-x {
+  animation: scrollX 28s linear infinite;
+}
+
+.animate-scroll-x:hover {
+  animation-play-state: paused;
+}
