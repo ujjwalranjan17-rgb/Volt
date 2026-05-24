@@ -5,8 +5,8 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    // BASE_URL is set by CI when deploying to GitHub Pages subdirectory
-    base: process.env.BASE_URL || '/',
+    // Use relative paths so the build works at any subdirectory (GitHub Pages, Vercel, etc.)
+    base: './',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
